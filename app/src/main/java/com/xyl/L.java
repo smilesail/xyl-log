@@ -15,7 +15,6 @@ import java.io.Writer;
  *  2.执行L.d()等方法, 参见{@link #d(String, Object) v/d/i/w/e}
  */
 public abstract class L {
-    protected static final int STACK_INDEX = 6;
 
     private static LogFactory mLogFactory;
     private static boolean mIsDebug;//默认Release, 不输出Log

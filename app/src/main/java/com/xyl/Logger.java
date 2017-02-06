@@ -9,6 +9,7 @@ import android.util.Log;
  */
 
 class Logger extends L implements LogFactory {
+    private static final int MIN_STACK_OFFSET = 3;
     private static final int INIT_METHOD_STACK = 1;
     private boolean isLogCurrentThread = true;//默认输出当前线程Log
     private int count;// 默认输出一级调用方法
@@ -110,14 +111,15 @@ class Logger extends L implements LogFactory {
         if (!isDebug()) return this;
         Thread currentThread = Thread.currentThread();
         StackTraceElement[] stackTrace = currentThread.getStackTrace();
-        String TAG = getTag(tag, stackTrace[STACK_INDEX]);
+        int stackOffset = getStackOffset(stackTrace);
+        String TAG = getTag(tag, stackTrace[stackOffset]);
         StringBuilder msgBuilder = new StringBuilder();
         if (isLogOutput() && (isLoggableIgnore() || Log.isLoggable(TAG, level))) {
-            for (int i = 0; i < count && i + STACK_INDEX < stackTrace.length; ++i) {
+            for (int i = 0; i < count && i + stackOffset < stackTrace.length; ++i) {
                 if (msgBuilder.length() > 0) {
                     msgBuilder.append("\n");
                 }
-                StackTraceElement element = stackTrace[STACK_INDEX + i];
+                StackTraceElement element = stackTrace[stackOffset + i];
                 String className = element.getClassName().replaceAll("(?:.*?)([^.]+)$", "$1");
                 String fileName = element.getFileName();
                 fileName = TextUtils.isEmpty(fileName) ? className : fileName;
@@ -138,6 +140,17 @@ class Logger extends L implements LogFactory {
         }
         clear();
         return this;
+    }
+
+    private int getStackOffset(StackTraceElement[] stackTrace) {
+        for(int i=MIN_STACK_OFFSET;i<stackTrace.length;++i){
+            StackTraceElement element = stackTrace[i];
+            String name = element.getClassName();
+            if(!name.equals(L.class.getName())&&!name.equals(this.getClass().getName())){
+                return i;
+            }
+        }
+        return 0;
     }
 
     @NonNull
