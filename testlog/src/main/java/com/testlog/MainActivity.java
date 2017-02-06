@@ -1,12 +1,14 @@
 package com.testlog;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.xyl.L;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,9 +19,26 @@ public class MainActivity extends AppCompatActivity {
         try{
             aaa();
         } catch (Exception e){
-        L.e(e).threadInfo(true);
-            e.printStackTrace();
+            L.threadInfo(true).e(TAG,"sss",e);
+            L.threadInfo(true).e(TAG, "sss",e);
+//            e.printStackTrace();
         }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("this is a test");
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setMessage("test message");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
     }
 
     private void aaa() {

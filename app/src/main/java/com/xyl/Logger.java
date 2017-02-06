@@ -15,15 +15,8 @@ class Logger extends L implements LogFactory {
     private int count;// 默认输出一级调用方法
     private boolean mThreadInfo;//为了保证一行输出, 默认不显示线程信息
     private static final ThreadLocal<L> LOGGER = new ThreadLocal<>();
-    private boolean mIsDetailException;
 
     Logger() {
-    }
-
-    @Override
-    protected L setDetailException(boolean detail) {
-        mIsDetailException = detail;
-        return this;
     }
 
     public static final L get() {
@@ -97,8 +90,8 @@ class Logger extends L implements LogFactory {
         return this;
     }
 
-    public Logger error(String msg, Throwable tr) {
-        println(Log.ERROR, null, msg, tr);
+    public Logger error(String tag, Object msg, Throwable tr) {
+        println(Log.ERROR, tag, msg, tr);
         return this;
     }
 
@@ -129,7 +122,7 @@ class Logger extends L implements LogFactory {
                 if (i == 0) {
                     msgBuilder.append(msg);
                     if (tr != null) {
-                        msgBuilder.append(mIsDetailException? exception2String2(tr):exception2String(tr));
+                        msgBuilder.append(exception2String(tr));
                     }
                 }
             }

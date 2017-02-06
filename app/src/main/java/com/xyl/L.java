@@ -73,7 +73,7 @@ public abstract class L {
     }
 
     /**
-     * 输出精简异常原因
+     * 输出详细异常信息
      * @param exception
      * @return
      */
@@ -166,8 +166,8 @@ public abstract class L {
         return getL().error(tag, msg);
     }
 
-    public static L e(String msg, Throwable tr) {
-        return getL().error(msg, tr);
+    public static L e(String tag, String msg, Throwable tr) {
+        return getL().error(tag, msg, tr);
     }
 
     public static L e(Object msg) {
@@ -177,12 +177,6 @@ public abstract class L {
     public static L e() {
         return getL().error();
     }
-
-    public static L detailException(boolean detail){
-        return getL().setDetailException(detail);
-    }
-
-    protected abstract L setDetailException(boolean detail);
 
     protected abstract L methodCount(int count);
 
@@ -216,8 +210,9 @@ public abstract class L {
 
     protected abstract L error(String tag, Object msg);
 
-    protected abstract L error(Object msg);
+    protected abstract L error(String tag, Object msg, Throwable tr);
 
+    protected abstract L error(Object msg);
     protected abstract L error();
 
 }
